@@ -214,17 +214,17 @@ fn main() -> anyhow::Result<()> {
             log::warn!("Flashing skipped - this might lead to malformed defmt data!")
         }
 
-        let mut defmt_decoder = DefmtDecoder::spawn(args.elf.as_path())?;
+        // let mut defmt_decoder = DefmtDecoder::spawn(args.elf.as_path())?;
 
-        let backtrace = command_server.read_rtt(
-            defmt_decoder.rtt_control_block_address(),
-            &mut defmt_decoder,
-        )?;
+        // let backtrace = command_server.read_rtt(
+        //     defmt_decoder.rtt_control_block_address(),
+        //     &mut defmt_decoder,
+        // )?;
 
-        let backtrace_info = backtrace.addr2line(args.elf.as_path())?;
+        // let backtrace_info = backtrace.addr2line(args.elf.as_path())?;
 
         println!("{}", "Device halted, backtrace as follows".red());
-        backtrace_info.log_stdout();
+        // backtrace_info.log_stdout();
     }
     Ok(()) as Result<(), anyhow::Error>
 }
