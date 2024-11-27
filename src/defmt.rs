@@ -243,30 +243,30 @@ pub fn decode_rtt<W: Write>(
             return exit_reason.context("Cannot query state of the main core");
         }
 
-        for (secondary_index, core) in secondary_cores.iter_mut().enumerate() {
-            if let Some(exit_reason) = should_exit_for_core(core, true) {
-                if exit_reason.is_ok() {
-                    // FIXME: The core index we give here might be misleading, we can probably obtain
-                    // that information from the core itself
-                    log::info!(
-                        "Secondary core {} halted, collecting RTT data for {}ms",
-                        secondary_index + 1,
-                        RTT_WAIT_DURATION.as_millis()
-                    );
-                    std::thread::sleep(RTT_WAIT_DURATION);
-                    read_from_core(
-                        core,
-                        &mut data_sink,
-                        &rtt_block,
-                        &mut local_read_index,
-                        &ring_buffer,
-                    )?;
-                }
-                return exit_reason.with_context(|| {
-                    format!("Cannot query state of core {}", secondary_index + 1)
-                });
-            }
-        }
+        // for (secondary_index, core) in secondary_cores.iter_mut().enumerate() {
+        //     if let Some(exit_reason) = should_exit_for_core(core, true) {
+        //         if exit_reason.is_ok() {
+        //             // FIXME: The core index we give here might be misleading, we can probably obtain
+        //             // that information from the core itself
+        //             log::info!(
+        //                 "Secondary core {} halted, collecting RTT data for {}ms",
+        //                 secondary_index + 1,
+        //                 RTT_WAIT_DURATION.as_millis()
+        //             );
+        //             std::thread::sleep(RTT_WAIT_DURATION);
+        //             read_from_core(
+        //                 core,
+        //                 &mut data_sink,
+        //                 &rtt_block,
+        //                 &mut local_read_index,
+        //                 &ring_buffer,
+        //             )?;
+        //         }
+        //         return exit_reason.with_context(|| {
+        //             format!("Cannot query state of core {}", secondary_index + 1)
+        //         });
+        //     }
+        // }
     }
 }
 
