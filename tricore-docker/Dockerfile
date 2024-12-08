@@ -79,7 +79,7 @@ WORKDIR /cargo-bin
 
 # Install defmt-print and addr2line for Windows.
 # The executables are later copied to the runner image.
-RUN cargo install defmt-print --target x86_64-pc-windows-msvc --locked --root /cargo-bin
+# RUN cargo install defmt-print --target x86_64-pc-windows-msvc --locked --root /cargo-bin
 # Addr2line binary has no crates.io release yet.
 # Until it has, we use git.
 RUN cargo install addr2line --target x86_64-pc-windows-msvc --features bin --git https://github.com/gimli-rs/addr2line --rev ade443f2ba6ce26a5dfddde1210f41aa46d96b92 --locked --root /cargo-bin
@@ -169,7 +169,7 @@ RUN cp "/root/wineftd2xx/ftd2xx.dll.so" "/root/.wine/dosdevices/c:/windows/syste
 
 WORKDIR "/root/.wine/dosdevices/c:/"
 COPY --from=builder /build/target/x86_64-pc-windows-msvc/release/tricore-probe.exe .
-COPY --from=builder-base /cargo-bin/bin/defmt-print.exe .
+# COPY --from=builder-base /cargo-bin/bin/defmt-print.exe .
 COPY --from=builder-base /cargo-bin/bin/addr2line.exe .
 
 # Wine debug channels https://wiki.winehq.org/Debug_Channels

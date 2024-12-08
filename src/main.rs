@@ -12,7 +12,7 @@ use std::str::FromStr;
 pub mod backtrace;
 mod chip_communication;
 pub mod das;
-pub mod defmt;
+// pub mod defmt;
 pub mod elf;
 pub mod flash;
 
@@ -44,7 +44,7 @@ struct Args {
 }
 
 fn main() -> anyhow::Result<()> {
-    let args = Args::parse();
+    let mut args = Args::parse();
 
     let log_filter = match args.log_level {
         LogLevel::Warn => LevelFilter::Warn,
@@ -86,6 +86,7 @@ fn main() -> anyhow::Result<()> {
             tricore_args.push("--device".to_owned());
             tricore_args.push(device.clone());
         }
+        args.log_level = LogLevel::Trace;
 
         match args.log_level {
             LogLevel::Warn => tricore_args.push("--log-level=warn".to_owned()),
@@ -163,7 +164,7 @@ fn main() -> anyhow::Result<()> {
         command.args(dev_path_param);
 
         command
-            .arg("veecle/flash-tricore")
+            .arg("aurix_flasher")
             .args(["bash", "-c"])
             .arg(daemon_command);
         command.status().expect("Failed to run docker command");
@@ -174,7 +175,6 @@ fn main() -> anyhow::Result<()> {
     {
         use crate::chip_communication::ChipCommunication;
         use colored::Colorize;
-        use defmt::DefmtDecoder;
 
         let mut command_server = ChipCommunication::new()?;
 

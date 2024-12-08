@@ -8,7 +8,6 @@ use std::path::Path;
 use std::time::Duration;
 
 use crate::das;
-use crate::defmt::{decode_rtt, HaltReason};
 use crate::elf::elf_to_hex;
 use crate::flash::AurixFlasherUpload;
 
@@ -84,26 +83,26 @@ impl ChipCommunication {
         self.flash_hex(ihex)
     }
 
-    pub(crate) fn read_rtt<W: Write>(
-        &mut self,
-        rtt_control_block_address: u64,
-        decoder: W,
-    ) -> anyhow::Result<Stacktrace> {
-        let system = self.get_system()?;
-        let core_count = system.core_count();
-        let mut core = system.get_core(0)?;
-        let secondary_cores: Result<Vec<_>, _> = (1..(core_count))
-            .map(|core_index| system.get_core(core_index))
-            .collect();
-        let mut secondary_cores = secondary_cores?;
-        let HaltReason::DebugHit(halt_reason) = decode_rtt(
-            &mut core,
-            &mut secondary_cores,
-            rtt_control_block_address,
-            decoder,
-        )?;
-        anyhow::Ok(halt_reason)
-    }
+    // pub(crate) fn read_rtt<W: Write>(
+    //     &mut self,
+    //     rtt_control_block_address: u64,
+    //     decoder: W,
+    // ) -> anyhow::Result<Stacktrace> {
+    //     let system = self.get_system()?;
+    //     let core_count = system.core_count();
+    //     let mut core = system.get_core(0)?;
+    //     let secondary_cores: Result<Vec<_>, _> = (1..(core_count))
+    //         .map(|core_index| system.get_core(core_index))
+    //         .collect();
+    //     let mut secondary_cores = secondary_cores?;
+    //     let HaltReason::DebugHit(halt_reason) = decode_rtt(
+    //         &mut core,
+    //         &mut secondary_cores,
+    //         rtt_control_block_address,
+    //         decoder,
+    //     )?;
+    //     anyhow::Ok(halt_reason)
+    // }
 
     /// Returns the selected device.
     ///
