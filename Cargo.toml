@@ -1,13 +1,13 @@
 [package]
 name = "tricore-probe"
-version = "0.2.0"
+version = "0.2.1"
 authors.workspace = true
 edition.workspace = true
 homepage.workspace = true
 license.workspace = true
 repository.workspace = true
 description = "Tricore-probe: Run Rust effortlessly on Infineon AURIX™ TriCore™ chips."
-rust-version = "1.74.0"
+rust-version = "1.81.0"
 
 [dependencies]
 anyhow = "1.0.69"

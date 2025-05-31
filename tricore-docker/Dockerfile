@@ -2,7 +2,7 @@
 
 # Use the official rust image with xwin (https://github.com/Jake-Shadle/xwin) as base.
 #
-FROM docker.io/library/rust:1.74.0-slim-bookworm AS builder-base
+FROM docker.io/library/rust:1.85.0-slim-bookworm AS builder-base
 
 ENV KEYRINGS /usr/local/share/keyrings
 
@@ -73,7 +73,7 @@ ENV CFLAGS_x86_64_pc_windows_msvc="$CL_FLAGS" \
 RUN rustup target add x86_64-pc-windows-msvc
 
 # Use cargo-chef to enable caching of dependencies.
-RUN cargo install cargo-chef --locked
+RUN cargo install cargo-chef@0.1.71 --locked
 
 WORKDIR /cargo-bin
 
@@ -108,10 +108,11 @@ RUN apt-get update
 RUN apt-get install --no-install-recommends -y innoextract
 WORKDIR "/root"
 # Copy Aurix flasher setup.
-COPY ["tricore-docker/AURIXFlasherSoftwareTool-setup_3.0.0_20241030-1737.exe", "."]
-# Extract Aurix flasher.
+COPY ["tricore-docker/AURIXFlasherSoftwareTool-setup_*.exe", "."]
+# Extract Aurix flasher, ensuring that we only copied one file.
 # This will extract to pwd/app.
-RUN innoextract AURIXFlasherSoftwareTool-setup_3.0.0_20241030-1737.exe
+RUN test "$(ls -1 AURIXFlasherSoftwareTool-setup_*.exe | wc -l)" -eq 1 || (echo "Expected exactly one AURIXFlasherSoftwareTool-setup_*.exe file in the ./tricore-docker directory" && exit 1) \
+    && innoextract AURIXFlasherSoftwareTool-setup_*.exe
 
 FROM ubuntu:jammy AS runner
 
@@ -185,5 +186,3 @@ ENV DAS_HOME="C:\\DAS64"
 ENV AURIX_FLASHER_PATH="C:\\Infineon\\AURIXFlasherSoftwareTool\\AURIXFlasher.exe"
 
 CMD ["bash"]
-
-

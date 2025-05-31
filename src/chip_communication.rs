@@ -1,9 +1,7 @@
-use crate::backtrace::Stacktrace;
 use anyhow::{bail, Context};
 use rust_mcd::connection::{Scan, ServerInfo};
 use rust_mcd::system::System;
 use std::fs;
-use std::io::Write;
 use std::path::Path;
 use std::time::Duration;
 
@@ -54,6 +52,7 @@ impl ChipCommunication {
         std::thread::sleep(Duration::from_millis(800));
 
         rust_mcd::library::init();
+
         anyhow::Ok(Self {
             device: None,
             scan_result: None,
@@ -103,7 +102,6 @@ impl ChipCommunication {
     //     )?;
     //     anyhow::Ok(halt_reason)
     // }
-
     /// Returns the selected device.
     ///
     /// This function will not fail if no selection has been made, but exactly one
